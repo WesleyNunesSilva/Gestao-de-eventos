@@ -10,7 +10,7 @@
                     <span class="  my-2">Usuário cadastrados: X</span>
                     <hr>
                     <div class="flex items-center ">
-                        <button class="border border-whi rounded px-3 py-1.5">Ver usuários</button>
+                        <a class="border border-whi rounded px-3 py-1.5 " href='{{route('user.index')}}'>Ver usuários</a>
                     </div>
                 </div>
                 <div class="card-users flex flex-col gap-2 w-full borded rounded text-white bg-blue-900 p-5 mt-5">
@@ -18,7 +18,7 @@
                     <span class="  my-2">Usuário cadastrados: X</span>
                     <hr>
                     <div class="flex items-center ">
-                        <button class="border border-white rounded px-3 py-1.5">Ver Eventos</button>
+                        <a class="border border-white rounded px-3 py-1.5" href='{{route('event.index')}}'>Ver Eventos</a>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                     <span class="  my-2">Usuário cadastrados: X</span>
                     <hr>
                     <div class="flex items-center ">
-                        <button class="border border-white rounded px-3 py-1.5">Ver inscrições</button>
+                        <a class="border border-white rounded px-3 py-1.5" href='{{route('registration.index')}}'>Ver inscrições</a>
                     </div>
                 </div>
                 <div class="card-users flex flex-col gap-2 w-full borded rounded text-white bg-emerald-700 p-5 mt-5">
@@ -37,7 +37,7 @@
                     <span class="  my-2">Usuário cadastrados: X</span>
                     <hr>
                     <div class="flex items-center ">
-                        <button class="border border-white rounded px-3 py-1.5">Ver pagamentos</button>
+                        <a class="border border-white rounded px-3 py-1.5" href='{{route('payment.index')}}'>Ver pagamentos</a>
                     </div>
                 </div>
             </div>

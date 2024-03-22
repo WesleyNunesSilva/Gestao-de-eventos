@@ -14,9 +14,9 @@
         @vite('resources/css/app.css')
       
     </head>
-    <body class="antialiased ">
-        <header class="bg-gray-100 shadow-lg">
-            <nav class="flex items-center justify-between px-6 py-4">
+    <body class="antialiased  ">
+        <header class="bg-gray-100 shadow-lg ">
+            <nav class="flex items-center justify-between px-6 py-4 ">
                 <div class="font-bold">
                     <h5>Logo</h5>
                 </div>
