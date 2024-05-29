@@ -18,6 +18,20 @@ class EventController extends Controller
         return view('event.create');
     }
 
+    public function store() {
+        Event::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'date' => $request->date,
+            'location' => $request->location,
+            'organizer_id' => auth()->id(),
+            'capacity' => $request->capacity,
+            'price' => $request->price,
+        ]);
+
+        return redirect()->route('events.index')->with('success', 'Evento criado com sucesso!');
+    }
+
     public function destroy(Event $event) {
         $event->delete();
 
