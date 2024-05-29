@@ -1,0 +1,46 @@
+@import url("~bootstrap/css/bootstrap.min.css");
+
+.card-custom {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.icon-small {
+    font-size: 1.5rem;
+}
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.btn-custom {
+    background-color: #f9faf8;
+    color: #292b40;
+    border: 1px solid #292b40;
+}
+.btn-custom:hover {
+    background-color: #292b40;
+    color: #fff;
+}
+.bg-dark-blue {
+    background-color: #292b40 !important;
+}
+
+.text-light {
+    color: #f9faf8;
+}
+.mt-5 {
+    margin-top: 5rem !important;
+}
+.mt-3 {
+    margin-top: 3rem !important;
+}
+.btn-edit {
+    background-color: #292b40;
+    color: #fff;
+}
+.btn-edit:hover {
+    background-color: #fff;
+    color: #292b40;
+    border: 1px solid #292b40;
+}
