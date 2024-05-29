@@ -18,7 +18,14 @@
         <header class="bg-light shadow-lg">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
-                    <a class="navbar-brand font-weight-bold" href="{{ url('/') }}">Logo</a>
+                    @if(Auth::check() && Auth::user()->isRegistered())
+                        <!-- Botão 'LOGO' desabilitado para inscritos -->
+                        <span class="navbar-brand font-weight-bold">Logo</span>
+                        
+                    @else
+                        <!-- Botão 'LOGO' habilitado para outros tipos de usuários -->
+                        <a class="navbar-brand font-weight-bold" href="{{ url('/home') }}">Logo</a>
+                    @endif
                     <div class="ml-auto">
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf

@@ -11,7 +11,9 @@
                         <th scope="col" class="text-light bg-dark-blue">Nome</th>
                         <th scope="col" class="text-light bg-dark-blue">Email</th>
                         <th scope="col" class="text-light bg-dark-blue">Tipo</th>
-                        <th scope="col" class="text-light bg-dark-blue">Ações</th>
+                        @if(auth()->user()->type === 'admin')
+                            <th scope="col" class="text-light bg-dark-blue">Ações</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -21,23 +23,25 @@
                             <td class="py-3 px-6">{{ $user->name }}</td>
                             <td class="py-3 px-6">{{ $user->email }}</td>
                             <td class="py-3 px-6">{{ $user->type }}</td>
-                            <td class="py-3 px-6">
-                                <div class="d-flex justify-content-center gap-3">
-                                    <!-- Botão para abrir o modal -->
-                                    <button type="button" class="btn btn-edit" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">
-                                        Editar
-                                    </button>
-
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" 
-                                            onclick="return confirm('Tem certeza que deseja apagar este usuário?')">
-                                            Excluir
+                            @if(auth()->user()->type === 'admin')
+                                <td class="py-3 px-6">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <!-- Botão para abrir o modal de edição -->
+                                        <button type="button" class="btn btn-edit" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">
+                                            Editar
                                         </button>
-                                    </form>
-                                </div>
-                            </td>
+                            
+                                        <!-- Formulário para exclusão do usuário -->
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar este usuário?')">
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            @endif
                         </tr>
 
                         <!-- Modal para editar usuário -->
@@ -82,7 +86,10 @@
                 </tbody>
             </table>
             <div class="d-flex justify-content-center mt-4">
-                <a href="{{ route('users.create') }}" class="btn btn-edit">Novo Usuário</a>
+                @if(auth()->user()->type === 'admin')
+                    <!-- Botão para criar novo usuário -->
+                    <a href="{{ route('users.create') }}" class="btn btn-edit">Novo Usuário</a>
+                @endif
             </div>
         </div>
     </div>

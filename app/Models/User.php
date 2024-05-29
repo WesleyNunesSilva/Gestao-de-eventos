@@ -32,4 +32,9 @@ class User extends Authenticatable
     public function registrations(){
         return $this->hasMany(Registration::class);
     }
+
+    public function isRegistered() {
+        // Lógica para verificar se o usuário está inscrito
+        return $this->type === 'registered';
+    }
 }

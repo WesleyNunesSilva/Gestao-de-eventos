@@ -27,9 +27,9 @@
                 <div class="">
                     <label for="type" class="">Tipo:</label>
                     <select name="type" id="type" class="">
-                        <option value="Usuário" >Usuário</option>
-                        <option value="Organizador" >Organizador</option>
-                        <option value="Administrador" >Administrador</option>
+                        <option value="registered" >Usuário</option>
+                        <option value="organizer" >Organizador</option>
+                        <option value="admin" >Administrador</option>
                     </select>
                 </div>
                 <button type="submit" class="">Cadastrar</button>
