@@ -16,19 +16,25 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-                @foreach ($events as $event)
+                @foreach ($events as $event) 
                     <tr>
                         <td class="py-3 px-6">{{ $event->id }}</td>
                         <td class="py-3 px-6">{{ $event->title }}</td>
                         <td class="py-3 px-6">{{ $event->description }}</td>
                         <td class="py-3 px-6">{{ $event->date }}</td>
                         <td class="py-3 px-6">{{ $event->location }}</td>
-                        <td class="py-3 px-6">{{ $event->organizer_id }}</td>
+                        <td class="py-3 px-6">{{ $event->organizer->name }}</td>
                         <td class="py-3 px-6">{{ $event->price }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-center align-itens-center">
+            <a  class="btn btn-edit " href="{{route('events.create')}}">
+                Novo evento
+            </a>
+        </div>
 
         <div class="d-flex justify-content-center">
             {{ $events->links() }}

@@ -14,10 +14,15 @@ class Event extends Model
         'description', 
         'date',
         'location',
-        'organizer',
+        'organizer_id',
         'capacity',
         'price'
     ];
+
+    public function organizer()
+    {
+        return $this->belongsTo(User::class, 'organizer_id');
+    }
 
     public function registrations() {
         return $this->hasMany(Registration::class);
