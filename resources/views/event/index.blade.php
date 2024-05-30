@@ -6,13 +6,14 @@
         <table class="table table-striped">
             <thead class="text-center">
                 <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Descrição</th>
-                    <th>Data</th>
-                    <th>Local</th>
-                    <th>Organizador</th>
-                    <th>Preço</th>
+                    <th class="text-light bg-dark-blue">ID</th>
+                    <th class="text-light bg-dark-blue">Título</th>
+                    <th class="text-light bg-dark-blue">Descrição</th>
+                    <th class="text-light bg-dark-blue">Data</th>
+                    <th class="text-light bg-dark-blue">Local</th>
+                    <th class="text-light bg-dark-blue">Organizador</th>
+                    <th class="text-light bg-dark-blue">Preço</th>
+                    <th class="text-light bg-dark-blue">Ação</th>                   
                 </tr>
             </thead>
             <tbody class="text-center">
@@ -23,18 +24,49 @@
                         <td class="py-3 px-6">{{ $event->description }}</td>
                         <td class="py-3 px-6">{{ $event->date }}</td>
                         <td class="py-3 px-6">{{ $event->location }}</td>
-                        <td class="py-3 px-6">{{ $event->organizer->name }}</td>
+                        <td class="py-3 px-6">{{ $event->organizer->name}}</td>
                         <td class="py-3 px-6">{{ $event->price }}</td>
+                        @if(auth()->user()->type === 'admin' || auth()->id() === $event->organizer_id)
+                            <td class="py-3 px-6">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <!-- Botão para abrir o modal de edição -->
+                                    <a href="{{route('events.edit', $event->id)}}" class="btn btn-edit">
+                                        Editar
+                                    </a>
+                            
+                                    <!-- Formulário para exclusão do usuário -->
+                                    <form action="{{ route('events.destroy', $event->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar este evento?')">
+                                            Excluir
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        @elseif (auth()->user()->type === 'registered' )
+                            <td class="py-3 px-6">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <!-- Botão para abrir o modal de edição -->
+                                    <a href="#" class="btn btn-edit">
+                                        Inscrever-se
+                                    </a>                       
+                                </div>
+                            </td>                       
+                        @else
+                            <td></td>                              
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
-        <div class="d-flex justify-content-center align-itens-center">
-            <a  class="btn btn-edit " href="{{route('events.create')}}">
-                Novo evento
-            </a>
-        </div>
+        @if(auth()->user()->type !== 'registered')
+            <div class="d-flex justify-content-center align-itens-center">
+                <a  class="btn btn-edit " href="{{route('events.create')}}">
+                    Novo evento
+                </a>
+            </div>
+        @endif
 
         <div class="d-flex justify-content-center">
             {{ $events->links() }}

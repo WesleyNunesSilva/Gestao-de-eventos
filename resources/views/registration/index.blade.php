@@ -1,30 +1,47 @@
 @extends('layouts.app')
-@section('content')
 
-<div class="py-4 px-6">
-    <div class="overflow-x-auto">
-        <table class="w-full whitespace-nowrap font-light table-auto border-b border-neutral-200 ">
-            <thead class="bg-gray-600 text-gray-300">
-                <tr >
-                    <th class="p-2">ID</th>
-                    <th class="p-2">Nome</th>
-                    <th class="p-2">Email</th>
-                    <th class="p-2">Tipo</th>
-                    <th class="p-2">criado</th>
+@section('content')
+    <div class="container">
+        <h2 class="text-center my-4">Inscritos</h2>
+        <table class="table table-striped">
+            <thead class="text-center">
+                <tr>
+                    <th class="text-light bg-dark-blue">ID</th>
+                    <th class="text-light bg-dark-blue">Usuario cadastrado</th>
+                    <th class="text-light bg-dark-blue">Evento</th>
+                    <th class="text-light bg-dark-blue">Data de cadastro</th>
+                    <th class="text-light bg-dark-blue">Data do evento</th>
+                    <th class="text-light bg-dark-blue">Status do cadastro</th>
+                    <th class="text-light bg-dark-blue">Ações</th>
                 </tr>
             </thead>
             <tbody class="text-center">
-                @foreach ($registrations as $registration)
-                    <tr class="border-b border-neutral-300">
-                        <td class="py-3 px-6 whitespace-nowrap font-medium">{{ $registration->id }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $registration->name }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $registration->email }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $registration->type }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $registration->created_at }}</td>
+                @foreach ($registrations as $registration) 
+                    <tr>
+                        <td class="py-3 px-6">{{ $registration->id }}</td>
+                        <td class="py-3 px-6">{{ $registration->user->name}}</td>
+                        <td class="py-3 px-6">{{ $registration->event->title}}</td>
+                        <td class="py-3 px-6">{{ $registration->registration_date }}</td>
+                        <td class="py-3 px-6">{{ $registration->event->date}}</td>
+                        <td class="py-3 px-6">{{ $registration->status }}</td>
+                        <td class="py-3 px-6">
+                            <div class="d-flex justify-content-center gap-3">
+                                <!-- Formulário para exclusão do usuário cadastrado-->
+                                <form action="{{ route('registrations.destroy', $registration->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja cancelar essa inscrição?')">
+                                        Cancelar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
-               @endforeach
+                @endforeach
             </tbody>
         </table>
+        <div class="d-flex justify-content-center">
+            {{ $registrations->links() }}
+        </div>
     </div>
-</div>
 @endsection

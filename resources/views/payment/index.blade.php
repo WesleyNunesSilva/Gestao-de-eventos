@@ -1,30 +1,54 @@
 @extends('layouts.app')
-@section('content')
 
-<div class="py-4 px-6">
-    <div class="overflow-x-auto">
-        <table class="w-full whitespace-nowrap font-light table-auto border-b border-neutral-200  ">
-            <thead class="bg-gray-600 text-gray-300">
-                <tr >
-                    <th class="p-2">ID</th>
-                    <th class="p-2">Nome</th>
-                    <th class="p-2">Email</th>
-                    <th class="p-2">Tipo</th>
-                    <th class="p-2">criado</th>
+@section('content')
+    <div class="container">
+        <h2 class="text-center my-4">Pagamentos</h2>
+        <table class="table table-striped">
+            <thead class="text-center">
+                <tr>
+                    <th class="text-light bg-dark-blue">ID</th>
+                    <th class="text-light bg-dark-blue">Título</th>
+                    <th class="text-light bg-dark-blue">Descrição</th>
+                    <th class="text-light bg-dark-blue">Data</th>
+                    <th class="text-light bg-dark-blue">Local</th>
+                    <th class="text-light bg-dark-blue">Organizador</th>
+                    <th class="text-light bg-dark-blue">Preço</th>
+                    <th class="text-light bg-dark-blue">Ação</th>                   
                 </tr>
             </thead>
             <tbody class="text-center">
-                @foreach ($payments as $payment)
-                    <tr class="border-b border-neutral-300">
-                        <td class="py-3 px-6 whitespace-nowrap font-medium">{{ $payment->id }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $payment->name }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $payment->email }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $payment->type }}</td>
-                        <td class="py-3 px-6 whitespace-nowrap">{{ $payment->created_at }}</td>
+                @foreach ($payments as $payment) 
+                    <tr>
+                        <td class="py-3 px-6">{{ $payment->id }}</td>
+                        <td class="py-3 px-6">{{ $payment->title }}</td>
+                        <td class="py-3 px-6">{{ $payment->description }}</td>
+                        <td class="py-3 px-6">{{ $payment->date }}</td>
+                        <td class="py-3 px-6">{{ $payment->location }}</td>
+                        <td class="py-3 px-6">{{ $payment->organizer->name }}</td>
+                        <td class="py-3 px-6">{{ $payment->price }}</td>
+                        
+                        <td class="py-3 px-6">
+                            <div class="d-flex justify-content-center gap-3">
+                                <!-- Botão para edição da lista de cadastrado -->
+                                <a href="{{route('payments.edit', $payment->id)}}" class="btn btn-edit">
+                                    Editar
+                                </a>
+                                <!-- Formulário para exclusão do usuário cadastrado-->
+                                <form action="{{ route('payments.destroy', $payment->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar este pagamento?')">
+                                        Excluir
+                                    </button>
+                                </form>
+                            </div>
+                        </td>         
                     </tr>
-               @endforeach
+                @endforeach
             </tbody>
+            <div class="d-flex justify-content-center">
+                {{ $payments->links() }}
+            </div>
         </table>
     </div>
-</div>
 @endsection
