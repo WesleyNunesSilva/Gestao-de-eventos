@@ -47,10 +47,13 @@
                         @elseif (auth()->user()->type === 'registered' )
                             <td class="py-3 px-6">
                                 <div class="d-flex justify-content-center gap-3">
-                                    <!-- Botão para abrir o modal de edição -->
-                                    <a href="#" class="btn btn-edit">
-                                        Inscrever-se
-                                    </a>                       
+                                    <form action="{{ route('registrations.store', $event->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-edit">
+                                            Inscrever-se
+                                        </button>                       
+                                    </form>
+
                                 </div>
                             </td>                       
                         @else

@@ -3,18 +3,21 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <title>Laravel</title>
-
+    
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-
+    
         <!-- Styles -->
-        @vite('resources/css/app.css')
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        @vite('resources/css/app.css')
     </head>
     <body class="antialiased  ">
+        @if (Auth::check())
+            
         <header class="bg-light shadow-lg">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
@@ -39,8 +42,18 @@
                 </div>
             </nav>
         </header>
+        @endif
         
-        <main class="container mt-4">
+        <main class="container">
+
+        @if (session('success'))
+            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+            @endif
+
             @yield('content')
         </main>
 

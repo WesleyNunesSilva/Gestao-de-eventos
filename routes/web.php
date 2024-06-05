@@ -43,6 +43,10 @@ Route::middleware(['auth', 'checkType:admin,organizer'])->group(function () {
 
 Route::middleware(['auth', 'checkType:registered'])->group(function () {
     Route::get('/', [EventController::class, 'index'])->name('events.index');
+    //Route::resource('registrations', RegistrationController::class);
+    Route::put('/registrations/{id}/update', [RegistrationController::class, 'update'])->name('registrations.update');
+    Route::get('/registrations', [RegistrationController::class, 'index'])->name('registrations.index');
+    Route::post('/registrations/store/{event}', [RegistrationController::class, 'store'])->name('registrations.store');
     Route::post('/events/{event}/registered', [EventController::class, 'registered'])->name('events.registered');
 });
 

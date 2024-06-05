@@ -1,5 +1,6 @@
 @import url("~bootstrap/css/bootstrap.min.css");
 
+/* Custom CSS */
 .card-custom {
     border: none;
     border-radius: 10px;
@@ -25,15 +26,8 @@
 .bg-dark-blue {
     background-color: #292b40 !important;
 }
-
 .text-light {
     color: #f9faf8;
-}
-.mt-5 {
-    margin-top: 5rem !important;
-}
-.mt-3 {
-    margin-top: 3rem !important;
 }
 .btn-edit {
     background-color: #292b40;
