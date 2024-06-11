@@ -17,37 +17,59 @@
     </head>
     <body class="antialiased  ">
         @if (Auth::check())
-            
-        <header class="bg-light shadow-lg">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container">
-                    @if(Auth::check() && Auth::user()->isRegistered())
-                        <!-- Botão 'LOGO' desabilitado para inscritos -->
-                        <span class="navbar-brand font-weight-bold">Logo</span>
-                        
-                    @else
-                        <!-- Botão 'LOGO' habilitado para outros tipos de usuários -->
-                        <a class="navbar-brand font-weight-bold" href="{{ url('/home') }}">Logo</a>
-                    @endif
-                    <div class="ml-auto">
+            <header class="bg-light shadow-lg pt-3">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container">
+                        <!-- Logo section -->
+                        <div class="navbar-brand">
+                            @if (Auth::user()->isRegistered())
+                                <!-- Botão 'LOGO' desabilitado para inscritos -->
+                                <span class="font-weight-bold">Logo</span>
+                            @else
+                                <!-- Botão 'LOGO' habilitado para outros tipos de usuários -->
+                                <a class="text-reset font-weight-bold text-decoration-none" href="{{ url('/home') }}">Logo</a>
+                            @endif
+                        </div>
+
+                        <!-- Toggler for mobile view -->
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <!-- Navigation links and logout button -->
+                        <div class="collapse navbar-collapse" id="navbarContent">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('home') }}">Eventos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('registrations.index') }}">Histórico de Inscrições</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('payments.index') }}">Pagamentos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-danger nav-link" href="{{ route('logout') }}" 
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Sair
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Logout form -->
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
-                       
-                        <a href="{{route('logout')}}" class="btn btn-danger"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Sair
-                        </a>
                     </div>
-                </div>
-            </nav>
-        </header>
+                </nav>
+            </header>
         @endif
         
         <main class="container">
 
-        @if (session('success'))
-            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+            @if (session('success'))
+                <div class="alert alert-success mt-3">{{ session('success') }}</div>
             @endif
 
             @if (session('error'))
