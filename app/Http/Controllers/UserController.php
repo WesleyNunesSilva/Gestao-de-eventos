@@ -13,16 +13,6 @@ class UserController extends Controller
         return view('user.index', compact('users'));
     }
 
-    public function update(Request $request, User $user) {
-        $user->update([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'type' => $request->input('type'),
-        ]);
-    
-        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso!');
-    }
-
     public function create() {
 
         return view('user.create');
@@ -31,7 +21,18 @@ class UserController extends Controller
     public function store(Request $request) {
         User::create(array_merge($request->all(), ['password' => bcrypt($request->input('password'))]));
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso!');;
+    }
+
+    public function update(Request $request, User $user) {
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'type' => $request->input('type'),
+            
+        ]);
+    
+        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso!');
     }
 
     public function destroy(User $user) {

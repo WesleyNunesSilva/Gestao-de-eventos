@@ -2,44 +2,45 @@
 
 @section('content')
     <div class="container">
-        <h2 class="text-center my-4">Pagamentos</h2>
+        <h2 class="text-left my-4">Pagamentos</h2>
         <table class="table table-striped">
             <thead class="text-center">
                 <tr>
-                    <th class="text-light bg-dark-blue">ID</th>
-                    <th class="text-light bg-dark-blue">Título</th>
-                    <th class="text-light bg-dark-blue">Descrição</th>
-                    <th class="text-light bg-dark-blue">Data</th>
-                    <th class="text-light bg-dark-blue">Local</th>
-                    <th class="text-light bg-dark-blue">Organizador</th>
-                    <th class="text-light bg-dark-blue">Preço</th>
+                    <th class="text-light bg-dark-blue">Valor</th>
+                    <th class="text-light bg-dark-blue">Método de pagamento</th>
+                    <th class="text-light bg-dark-blue">Status</th>
+                    <th class="text-light bg-dark-blue">Data de pagamento</th>
                     <th class="text-light bg-dark-blue">Ação</th>                   
                 </tr>
             </thead>
             <tbody class="text-center">
                 @foreach ($payments as $payment) 
                     <tr>
-                        <td class="py-3 px-6">{{ $payment->id }}</td>
-                        <td class="py-3 px-6">{{ $payment->title }}</td>
-                        <td class="py-3 px-6">{{ $payment->description }}</td>
-                        <td class="py-3 px-6">{{ $payment->date }}</td>
-                        <td class="py-3 px-6">{{ $payment->location }}</td>
-                        <td class="py-3 px-6">{{ $payment->organizer->name }}</td>
-                        <td class="py-3 px-6">{{ $payment->price }}</td>
+                        <td class="py-3 px-6">{{ $payment->value }}</td>
+                        <td class="py-3 px-6">{{ $payment->payment_method }}</td>
+                        <td class="py-3 px-6">{{ $payment->status }}</td>
+                        <td class="py-3 px-6">{{ $payment->payment_date }}</td>
                         
                         <td class="py-3 px-6">
                             <div class="d-flex justify-content-center gap-3">
-                                <!-- Botão para edição da lista de cadastrado -->
-                                <a href="{{route('payments.edit', $payment->id)}}" class="btn btn-edit">
-                                    Editar
-                                </a>
-                                <!-- Formulário para exclusão do usuário cadastrado-->
-                                <form action="{{ route('payments.destroy', $payment->id) }}" method="POST">
+                                <!-- Botão para efetuar pagamento -->
+                                <form action="{{ route('payments.create', $payment->registration_id) }}">
                                     @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar este pagamento?')">
-                                        Excluir
-                                    </button>
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-edit">
+                                        Efetuar pagamento
+                                    </button>                           
+
+                                </form>
+                                <!-- Formulário para atualizar o status do pagamento -->
+                                <form action="{{ route('payments.updateStatus', $payment->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option value="pending" {{ $payment->status == 'pending' ? 'selected' : '' }}>Pendente</option>
+                                        <option value="completed" {{ $payment->status == 'completed' ? 'selected' : '' }}>Completo</option>
+                                        <option value="canceled" {{ $payment->status == 'canceled' ? 'selected' : '' }}>Cancelado</option>
+                                    </select>
                                 </form>
                             </div>
                         </td>         

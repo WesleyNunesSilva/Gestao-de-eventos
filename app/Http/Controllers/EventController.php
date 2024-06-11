@@ -7,15 +7,12 @@ use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
-    public function index() {
-        {
-            $events = Event::with('organizer')->paginate(15);
-            return view('event.index', compact('events'));
-        }
+    public function index() {    
+        $events = Event::with('organizer')->paginate(15);
+        return view('event.index', compact('events'));      
     }
 
     public function create() {
-
         return view('event.create');
     }
 
@@ -35,28 +32,23 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('success', 'Evento criado com sucesso!');
     }
 
-    public function edit( Event $event) {
-
-        if (Auth::user()->type !== 'admin' && Auth::id() !== $event->organizer_id) {
-            return redirect()->route('events.index')->with('error', 'Você não pode editar este evento');
-            abort(403, 'Acesso negado.');
-        }
+    public function edit(Event $event) {
+        $this->authorize('update', $event);
         return view('event.edit', compact('event'));
     }
 
     public function update(Request $request, Event $event) {
-        if (Auth::user()->type !== 'admin' && Auth::id() !== $event->organizer_id) {
-            abort(403, 'Acesso negado.');
-        }
+        $this->authorize('update', $event);
 
         $event->update($request->all());
-
         return redirect()->route('events.index')->with('success', 'Evento atualizado com sucesso!');
     }
 
     public function destroy(Event $event) {
+        $this->authorize('delete', $event);
+    
         $event->delete();
-
-        return redirect()->route('events.index');
+    
+        return redirect()->route('events.index')->with('success', 'Evento excluído com sucesso!');
     }
 }
