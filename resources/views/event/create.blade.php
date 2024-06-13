@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h2 class="mb-4">Criar Evento</h2>
+                <h2 class="my-4">Criar Evento</h2>
 
                 <form action="{{ route('events.store') }}" method="POST">
                     @csrf
@@ -32,7 +32,7 @@
                         <label for="price" class="form-label">Preço</label>
                         <input type="number" class="form-control" id="price" name="price" required>
                     </div>
-                    <button type="submit" class="btn btn-edit">Cadastrar</button>
+                    <button type="submit" class="btn btn-edit mt-2">Cadastrar</button>
                 </form>
             </div>
         </div>

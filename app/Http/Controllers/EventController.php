@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Event;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,5 +52,20 @@ class EventController extends Controller
         $event->delete();
     
         return redirect()->route('events.index')->with('success', 'Evento excluído com sucesso!');
+    }
+
+    public function show($id)
+    {
+        $event = Event::findOrFail($id);
+        return view('event.show', compact('event'));
+    }
+
+    public function showEventPayments($eventId) {
+        $event = Event::findOrFail($eventId);
+        $payments = Payment::whereHas('registration', function ($query) use ($eventId) {
+            $query->where('event_id', $eventId);
+        })->paginate(15);
+
+        return view('event.payments', compact('event', 'payments'));
     }
 }

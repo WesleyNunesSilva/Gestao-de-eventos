@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -26,5 +27,13 @@ class Event extends Model
 
     public function registrations() {
         return $this->hasMany(Registration::class);
+    }
+
+    public function getFormattedPriceAttribute() {
+        return 'R$ ' . number_format($this->price, 2, ',', '.');
+    }
+
+    public function getFormattedDateAttribute() {
+        return Carbon::parse($this->date)->format('d/m/Y');
     }
 }

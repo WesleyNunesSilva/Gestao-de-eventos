@@ -33,6 +33,7 @@ Route::middleware(['auth', 'checkType:admin,organizer'])->group(function () {
     });
     Route::put('/registrations/{id}/update', [RegistrationController::class, 'update'])->name('registrations.update');
     Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy'])->name('registrations.destroy');
+    Route::get('events/{eventId}/payments', [EventController::class, 'showEventPayments'])->name('events.payments');
 });
 
 Route::middleware(['auth', 'checkType:registered,admin,organizer'])->group(function () {
@@ -43,8 +44,10 @@ Route::middleware(['auth', 'checkType:registered,admin,organizer'])->group(funct
     Route::post('/payments/store/{id}', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/create/{id}', [PaymentController::class, 'create'])->name('payments.create');
     Route::put('/payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
+    
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
     Route::post('/events/{event}/registered', [EventController::class, 'registered'])->name('events.registered');
+    Route::get('events/{id}', [EventController::class, 'show'])->name('events.show');
 });
 
 // Rotas de pagamentos (aplicável a todos os usuários autenticados)

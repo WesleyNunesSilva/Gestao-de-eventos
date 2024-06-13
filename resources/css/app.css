@@ -38,3 +38,25 @@
     color: #292b40;
     border: 1px solid #292b40;
 }
+.pagination .page-link {
+    color: #ffffff; /* Cor do texto dos links */
+    background-color: #292b40; /* Cor de fundo dos links */
+    border: 1px solid #292b40; /* Cor da borda dos links */
+    padding: 0.5rem 0.75rem; /* Tamanho dos botões */
+    margin: 0 2px; /* Espaçamento entre os botões */
+}
+
+.pagination .page-link:hover {
+    background-color: #1f2135; /* Cor de fundo dos links ao passar o mouse */
+    border-color: #1f2135; /* Cor da borda dos links ao passar o mouse */
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #1f2135; /* Cor de fundo do link ativo */
+    border-color: #1f2135; /* Cor da borda do link ativo */
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #cccccc; /* Cor de fundo dos links desativados */
+    border-color: #cccccc; /* Cor da borda dos links desativados */
+}

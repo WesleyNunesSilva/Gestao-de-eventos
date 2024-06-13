@@ -37,7 +37,7 @@
                         </button>
 
                         <!-- Navigation links and logout button -->
-                        <div class="collapse navbar-collapse" id="navbarContent">
+                        <div class="collapse navbar-collapse  justify-content-between" id="navbarContent">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('home') }}">Eventos</a>
@@ -48,13 +48,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('payments.index') }}">Pagamentos</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-danger nav-link" href="{{ route('logout') }}" 
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Sair
-                                    </a>
-                                </li>
                             </ul>
+                            
+                            <a class="btn btn-danger btn-sm" href="{{ route('logout') }}" 
+                              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Sair
+                            </a>
+                            
                         </div>
 
                         <!-- Logout form -->

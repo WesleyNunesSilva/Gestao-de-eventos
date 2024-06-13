@@ -1,16 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2 class="mb-4 my-4" >Realizar Pagamento</h2>
-                <form action="{{ route('payments.store',$registration->id) }}" method="POST">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4 my-4">Realizar Pagamento</h2>
+
+            @if ($registration->payment)
+                <div class="alert alert-warning" role="alert">
+                    Pagamento já realizado para esta inscrição.
+                </div>
+            @else
+                <form action="{{ route('payments.store', $registration->id) }}" method="POST">
                     @csrf
 
                     <div class="form-group">
                         <label class="form-label" for="value">Valor</label>
-                        <input type="text" class="form-control" id="value" name="value" value="{{ $event->price }}" readonly>
+                        <input type="text" class="form-control" id="value" name="value"
+                            value="{{ $event->formatted_price }}" readonly>
                     </div>
 
                     <div class="form-group">
@@ -23,7 +30,8 @@
                     </div>
                     <button type="submit" class="btn btn-edit mt-3">Efetuar o pagamento</button>
                 </form>
-            </div>    
-        </div>        
+            @endif
+        </div>
     </div>
+</div>
 @endsection

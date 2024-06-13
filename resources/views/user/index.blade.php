@@ -71,9 +71,9 @@
                                             <div class="mb-4 form-group">
                                                 <label for="type" class="form-label">Tipo</label>
                                                 <select name="type" id="type" class="form-select py-2 px-3">
-                                                    <option value="Usuário" {{ $user->type === 'Usuário' ? 'selected' : '' }}>Usuário</option>
-                                                    <option value="Organizador" {{ $user->type === 'Organizador' ? 'selected' : '' }}>Organizador</option>
-                                                    <option value="Administrador" {{ $user->type === 'Administrador' ? 'selected' : '' }}>Administrador</option>
+                                                    <option value="registered" {{ $user->type === 'registered' ? 'selected' : '' }}>Usuário</option>
+                                                    <option value="organizer" {{ $user->type === 'organizer' ? 'selected' : '' }}>Organizador</option>
+                                                    <option value="admin" {{ $user->type === 'admin' ? 'selected' : '' }}>Administrador</option>
                                                 </select>
                                             </div>
                                             <button type="submit" class="btn btn-edit">Salvar alterações</button>

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Editar Evento</h1>
+        <h2 class="my-4">Editar Evento</h2>
         <form action="{{ route('events.update', $event) }}" method="POST">
             @csrf
             @method('PUT')
@@ -30,7 +30,7 @@
                 <label for="price" class="form-label">Preço</label>
                 <input type="number" class="form-control" id="price" name="price" value="{{ $event->price }}" required>
             </div>
-            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <button type="submit" class="btn btn-edit mt-2">Salvar Alterações</button>
         </form>
     </div>
 @endsection

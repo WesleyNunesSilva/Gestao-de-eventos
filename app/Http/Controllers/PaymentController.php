@@ -12,15 +12,20 @@ class PaymentController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $payments = Payment::paginate(15);
         
         if ($user->type === 'admin') {
-            $payments = Payment::paginate(15);
+            $payments = Payment::with('registration.event')->paginate(15);
         } elseif ($user->type === 'organizer') {
             $eventIds = Event::where('organizer_id', $user->id)->pluck('id');
             $registrationIds = Registration::whereIn('event_id', $eventIds)->pluck('id');
-            $payments = Payment::whereIn('registration_id', $registrationIds)->paginate(15);
-        } 
+            $payments = Payment::whereIn('registration_id', $registrationIds)
+                                ->with('registration.event')
+                                ->paginate(15);
+        } else {
+            $payments = Payment::whereHas('registration', function($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->with('registration.event')->paginate(15);
+        }
 
         return view('payment.index', compact('payments'));
     }
@@ -33,10 +38,13 @@ class PaymentController extends Controller
         return view('payment.create', compact('registration', 'event'));
     }
 
-    public function store(Request $request, $registrationId)
-    {
+    public function store(Request $request, $registrationId) {
         $user = Auth::user();
         $registration = Registration::findOrFail($registrationId);
+
+        if ($registration->hasPayment()) {
+            return redirect()->back()->with('error', 'Pagamento já realizado para esta inscrição.');
+        }
 
         if ($user->id !== $registration->user_id) {
             return redirect()->back()->with('error', 'Você não tem permissão para fazer este pagamento.');
@@ -64,4 +72,11 @@ class PaymentController extends Controller
 
         return redirect()->route('payments.index')->with('success', 'Status do pagamento atualizado com sucesso!');
     }
+
+    public function showEventPayments(Event $event) {
+        $payments = Payment::where('event_id', $event->id)->get();
+
+        return view('events.payments', compact('event', 'payments'));
+    }
+
 }
