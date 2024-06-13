@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\RegistrationConfirmed;
 
 class PaymentController extends Controller
 {
@@ -41,26 +42,42 @@ class PaymentController extends Controller
     public function store(Request $request, $registrationId) {
         $user = Auth::user();
         $registration = Registration::findOrFail($registrationId);
-
+    
         if ($registration->hasPayment()) {
             return redirect()->back()->with('error', 'Pagamento já realizado para esta inscrição.');
         }
-
+    
         if ($user->id !== $registration->user_id) {
             return redirect()->back()->with('error', 'Você não tem permissão para fazer este pagamento.');
         }
-
+    
         $event = Event::findOrFail($registration->event_id);
         $value = $event->price;
-
-        Payment::create([
+    
+        // Cria o pagamento
+        $payment = Payment::create([
             'value' => $value,
             'payment_method' => $request->payment_method,
             'status' => 'pending',
             'payment_date' => now(),
             'registration_id' => $registrationId,
         ]);
+    
+        // Atualiza o status do pagamento e da inscrição se o pagamento for bem-sucedido
+        if ($payment) {
+            $payment->status = 'completed';
+            $payment->save();
+    
+            $registration->status = 'confirmed'; // ou outro status desejado para a inscrição
 
+            
+            $registration->save();
+        }
+
+        if ($registration->status == 'confirmed') {
+            event(new RegistrationConfirmed($registration));
+        }
+    
         return redirect()->route('payments.index')->with('success', 'Pagamento realizado com sucesso!');
     }
 
@@ -77,6 +94,25 @@ class PaymentController extends Controller
         $payments = Payment::where('event_id', $event->id)->get();
 
         return view('events.payments', compact('event', 'payments'));
+    }
+
+    public function financialReport() {
+        $user = Auth::user();
+        if ($user->type === 'organizer' || $user->type === 'admin') {
+            $eventIds = Event::where('organizer_id', $user->id)->pluck('id');
+            $payments = Payment::whereIn('registration_id', function($query) use ($eventIds) {
+                $query->select('id')
+                    ->from('registrations')
+                    ->whereIn('event_id', $eventIds);
+            })->get();
+
+            $totalReceived = $payments->where('status', 'completed')->sum('value');
+            $totalPending = $payments->where('status', 'pending')->sum('value');
+
+            return view('payment.financial', compact('payments', 'totalReceived', 'totalPending'));
+        }
+
+        return redirect()->back()->with('error', 'Você não tem permissão para acessar esta página.');
     }
 
 }

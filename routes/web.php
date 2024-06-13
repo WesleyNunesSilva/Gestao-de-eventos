@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +13,7 @@ Auth::routes();
 
 // Rotas acessíveis a todos os usuários autenticados
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [EventController::class, 'index'])->name('home');
+    Route::get('/', [EventController::class, 'index'])->name('payment.index');
 });
 
 // Rotas exclusivas para administradores
@@ -28,11 +29,10 @@ Route::middleware(['auth', 'checkType:admin,organizer'])->group(function () {
     Route::resource('events', EventController::class)->except(['show']);
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
-    Route::get('/home', function () { 
-        return view('home');
-    });
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::put('/registrations/{id}/update', [RegistrationController::class, 'update'])->name('registrations.update');
     Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy'])->name('registrations.destroy');
+    
     Route::get('events/{eventId}/payments', [EventController::class, 'showEventPayments'])->name('events.payments');
 });
 
@@ -44,8 +44,9 @@ Route::middleware(['auth', 'checkType:registered,admin,organizer'])->group(funct
     Route::post('/payments/store/{id}', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/create/{id}', [PaymentController::class, 'create'])->name('payments.create');
     Route::put('/payments/{id}/update-status', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus');
-    
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::get('/organizer/financial-report', [PaymentController::class, 'financialReport'])->name('payments.financial');
+
     Route::post('/events/{event}/registered', [EventController::class, 'registered'])->name('events.registered');
     Route::get('events/{id}', [EventController::class, 'show'])->name('events.show');
 });

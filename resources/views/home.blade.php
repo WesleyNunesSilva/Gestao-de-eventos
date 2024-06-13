@@ -10,7 +10,7 @@
                             <i class="fas fa-users icon-small"></i> 
                             Total de Usuários
                         </h3>
-                        <span class="card-text text-light">Usuários cadastrados: X</span>
+                        <span class="card-text text-light">Usuários cadastrados: {{ $totalUsers }}</span>
                         <hr>
                         <div>
                             <a class="btn btn-custom" href="{{ route('users.index') }}">Ver usuários</a>
@@ -23,7 +23,7 @@
                             <i class="fas fa-calendar-alt icon-small"></i> 
                             Total de Eventos
                         </h3>
-                        <span class="card-text text-light">Eventos cadastrados: X</span>
+                        <span class="card-text text-light">Eventos cadastrados: {{ $totalEvents }}</span>
                         <hr class="">
                         <div>
                             <a class="btn btn-custom" href="{{ route('events.index') }}">Ver Eventos</a>
@@ -38,7 +38,7 @@
                             <i class="fas fa-clipboard-list icon-small"></i> 
                             Total de Inscrições
                         </h3>
-                        <span class="card-text text-light">Inscrições cadastradas: X</span>
+                        <span class="card-text text-light">Inscrições cadastradas: {{ $totalRegistrations }}</span>
                         <hr>
                         <div>
                             <a class="btn btn-custom" href="{{ route('registrations.index') }}">Ver Inscrições</a>
@@ -51,7 +51,7 @@
                             <i class="fas fa-dollar-sign icon-small"></i> 
                             Total de Pagamentos
                         </h3>
-                        <span class="card-text text-light">Pagamentos cadastrados: X</span>
+                        <span class="card-text text-light">Pagamentos cadastrados: {{ $totalPayments }}</span>
                         <hr>
                         <div>
                             <a class="btn btn-custom" href="{{ route('payments.index') }}">Ver Pagamentos</a>

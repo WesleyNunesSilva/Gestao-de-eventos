@@ -9,12 +9,12 @@ class UserController extends Controller
 {
     public function index() {
         $users = User::paginate(15);
+        $totalUsers = User::count();
 
-        return view('user.index', compact('users'));
+        return view('user.index', compact('users', 'totalUsers'));
     }
 
     public function create() {
-
         return view('user.create');
     }
 

@@ -50,7 +50,20 @@
                             </td>
                             <td class="py-3 px-6">
                                 <div class="d-flex justify-content-center gap-3">
-                                    @if(auth()->user()->type !== 'registered' || auth()->id() === $registration->organizer_id)
+                                    @if($registration->canConfirm($user))
+                                        <form action="{{ route('registrations.update', $registration) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" name="status" value="confirmed" class="btn text-success" onclick="return confirm('Tem certeza que deseja confirmar essa inscrição?')">
+                                                <i class="fas fa-check"></i> Confirmar
+                                            </button>
+                                            <button type="submit" name="status" value="canceled" class="btn text-danger" onclick="return confirm('Tem certeza que deseja cancelar essa inscrição?')">
+                                                <i class="fas fa-times"></i> Cancelar
+                                            </button>
+                                        </form>
+                                    @endif
+                            
+                                    @if($registration->canCancel($user))
                                         <form action="{{ route('registrations.destroy', $registration->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -58,22 +71,9 @@
                                                 Excluir
                                             </button>
                                         </form>
-
-                                        @if($registration->status == 'pending')
-                                            <form action="{{ route('registrations.update', $registration) }}" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" name="status" value="confirmed" class="btn text-success" onclick="return confirm('Tem certeza que deseja confirmar essa inscrição?')">
-                                                    <i class="fas fa-check"></i> Confirmar
-                                                </button>
-                                                <button type="submit" name="status" value="canceled" class="btn text-danger" onclick="return confirm('Tem certeza que deseja cancelar essa inscrição?')">
-                                                    <i class="fas fa-times"></i> Cancelar
-                                                </button>
-                                            </form>
-                                        @endif
                                     @endif
-
-                                    @if($registration->status == 'pending' && !$registration->payment)
+                            
+                                    @if($registration->canPay($user))
                                         <form action="{{ route('payments.create', $registration->id) }}" method="GET">
                                             @csrf
                                             <button type="submit" class="btn btn-edit">

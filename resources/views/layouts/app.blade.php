@@ -24,10 +24,10 @@
                         <div class="navbar-brand">
                             @if (Auth::user()->isRegistered())
                                 <!-- Botão 'LOGO' desabilitado para inscritos -->
-                                <span class="font-weight-bold">Logo</span>
+                                <span class="font-weight-bold">Início</span>
                             @else
                                 <!-- Botão 'LOGO' habilitado para outros tipos de usuários -->
-                                <a class="text-reset font-weight-bold text-decoration-none" href="{{ url('/home') }}">Logo</a>
+                                <a class="text-reset font-weight-bold text-decoration-none" href="{{ url('/home') }}">Início</a>
                             @endif
                         </div>
 
@@ -40,13 +40,13 @@
                         <div class="collapse navbar-collapse  justify-content-between" id="navbarContent">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('home') }}">Eventos</a>
+                                    <a class="nav-link" href="{{ route('payment.index') }}">Eventos</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('registrations.index') }}">Histórico de Inscrições</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('payments.index') }}">Pagamentos</a>
+                                    <a class="nav-link" href="{{ Auth::user()->type == 'organizer' || Auth::user()->type == 'admin' ? route('payments.financial') : route('payments.index') }}">Pagamentos</a>
                                 </li>
                             </ul>
                             

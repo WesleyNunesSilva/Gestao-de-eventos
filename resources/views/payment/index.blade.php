@@ -25,13 +25,21 @@
                         <td class="py-3 px-6">{{ $payment->payment_method }}</td>
                         <td class="py-3 px-6">
                             @if ($payment->registration->hasPayment())
-                                <!-- Mostrar status do pagamento -->
                                 @if ($payment->registration->payment->status == 'pending')
+                                <span class="text-warning">
+                                    <i class="fas fa-hourglass-half"></i> 
                                     Pendente
+                                </span>
                                 @elseif ($payment->registration->payment->status == 'completed')
-                                    Completo
+                                    <span class=" text-success">
+                                        <i class="fas fa-check"></i> 
+                                        Confirmado
+                                    </span>
                                 @elseif ($payment->registration->payment->status == 'canceled')
-                                    Cancelado
+                                    <span class=" text-danger badge-danger">
+                                        <i class="fas fa-times"></i>
+                                        Cancelado
+                                    </span>
                                 @endif
                             @else
                                 Sem pagamento

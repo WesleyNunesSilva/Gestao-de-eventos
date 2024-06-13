@@ -5,6 +5,7 @@ use App\Models\Registration;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use Illuminate\Database\IntegrityConstraintViolationException;
+use App\Events\RegistrationConfirmed;
 
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class RegistrationController extends Controller
         } else {
             $registrations = Registration::where('user_id', $user->id)->paginate(10);
         }
-        return view('registration.index', compact('registrations'));
+        return view('registration.index', compact('registrations', 'user'));
     }
 
     public function store(Request $request, $event) {
@@ -50,11 +51,11 @@ class RegistrationController extends Controller
         }
     }
 
-    public function update (Request $request, $id) {
+    public function update(Request $request, $id) {
         $registration = Registration::findOrFail($id);
         $registration->status = $request->status;
         $registration->save();
-
+    
         $message = ($registration->status == 'canceled') ? 'Inscrição cancelada com sucesso!' : 'Inscrição atualizada com sucesso!';
         return redirect()->route('registrations.index')->with('success', $message);
     }

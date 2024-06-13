@@ -45,4 +45,16 @@ class Registration extends Model
     public function getFormattedEventDateAttribute() {
         return Carbon::parse($this->event->date )->format('d/m/Y');
     }
+
+    public function canConfirm($user) {
+        return $this->status == 'pending' && $user->type !== 'registered';
+    }
+
+    public function canCancel($user) {
+        return $user->type !== 'registered' || $user->id === $this->organizer_id;
+    }
+
+    public function canPay($user) {
+        return $this->status == 'pending' && !$this->payment && $user->type == 'registered';
+    }
 }
