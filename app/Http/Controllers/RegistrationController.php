@@ -5,7 +5,8 @@ use App\Models\Registration;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use Illuminate\Database\IntegrityConstraintViolationException;
-use App\Events\RegistrationConfirmed;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationConfirmedMail;
 
 use Illuminate\Http\Request;
 
@@ -55,6 +56,10 @@ class RegistrationController extends Controller
         $registration = Registration::findOrFail($id);
         $registration->status = $request->status;
         $registration->save();
+
+        if($registration->status == 'confirmed') {
+            Mail::to($registration->user->email)->send(new RegistrationConfirmedMail($registration));
+        }
     
         $message = ($registration->status == 'canceled') ? 'Inscrição cancelada com sucesso!' : 'Inscrição atualizada com sucesso!';
         return redirect()->route('registrations.index')->with('success', $message);

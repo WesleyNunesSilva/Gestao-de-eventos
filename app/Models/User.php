@@ -40,7 +40,5 @@ class User extends Authenticatable
 
     public function isRegistered() {
         return $this->type === 'registered';
-    }
-
-   
+    } 
 }

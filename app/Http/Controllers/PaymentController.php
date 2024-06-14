@@ -6,7 +6,8 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Events\RegistrationConfirmed;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationConfirmedMail;
 
 class PaymentController extends Controller
 {
@@ -68,21 +69,16 @@ class PaymentController extends Controller
             $payment->status = 'completed';
             $payment->save();
     
-            $registration->status = 'confirmed'; // ou outro status desejado para a inscrição
-
-            
+            $registration->status = 'confirmed';
             $registration->save();
-        }
 
-        if ($registration->status == 'confirmed') {
-            event(new RegistrationConfirmed($registration));
+            Mail::to($registration->user->email)->send(new RegistrationConfirmedMail($registration));
         }
-    
+        
         return redirect()->route('payments.index')->with('success', 'Pagamento realizado com sucesso!');
     }
 
-    public function updateStatus($id, Request $request)
-    {
+    public function updateStatus($id, Request $request) {
         $payment = Payment::findOrFail($id);
         $payment->status = $request->status;
         $payment->save();
