@@ -63,4 +63,11 @@ class EventPolicy
     {
         //
     }
+
+    public function boot()
+    {
+        $this->registerPolicies();
+
+        //
+    }
 }

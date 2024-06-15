@@ -3,11 +3,17 @@
 @section('content')
 
     <div class="py-4 px-6">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Usuários</h2>
+            @if(auth()->user()->type === 'admin')
+                <!-- Botão para criar novo usuário -->
+                <a href="{{ route('users.create') }}" class="btn btn-edit">Novo Usuário</a>
+            @endif
+        </div>
         <div class="table-responsive">
             <table class="table table-striped ">
                 <thead class="text-center">
                     <tr >
-                        <th scope="col" class="text-light bg-dark-blue">ID</th>
                         <th scope="col" class="text-light bg-dark-blue">Nome</th>
                         <th scope="col" class="text-light bg-dark-blue">Email</th>
                         <th scope="col" class="text-light bg-dark-blue">Tipo</th>
@@ -19,10 +25,23 @@
                 <tbody class="text-center">
                     @foreach ($users as $user)
                         <tr>
-                            <td class="py-3 px-6">{{ $user->id }}</td>
                             <td class="py-3 px-6">{{ $user->name }}</td>
                             <td class="py-3 px-6">{{ $user->email }}</td>
-                            <td class="py-3 px-6">{{ $user->type }}</td>
+                            <td class="py-3 px-6">
+                                @switch($user->type )
+
+                                    @case('admin')
+                                        Administrador
+                                        @break
+                                    @case('organizer')
+                                        Organizador
+                                        @break
+                                    @case('registered')
+                                        Usuário
+                                        @break
+                                @endswitch
+
+                            </td>
                             @if(auth()->user()->type === 'admin')
                                 <td class="py-3 px-6">
                                     <div class="d-flex justify-content-center gap-3">
@@ -85,12 +104,58 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="d-flex justify-content-center mt-4">
-                @if(auth()->user()->type === 'admin')
-                    <!-- Botão para criar novo usuário -->
-                    <a href="{{ route('users.create') }}" class="btn btn-edit">Novo Usuário</a>
-                @endif
-            </div>
+        </div>
+        
+         {{-- Paginação --}}
+         <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+    
+                    {{-- Primeira página --}}
+                    <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $users->url(1) }}" aria-label="Primeira página">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+    
+                    {{-- Anterior Page Link --}}
+                    <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $users->previousPageUrl() }}" rel="prev" aria-label="Anterior">
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                    </li>
+    
+                    {{-- Pagination Elements --}}
+                    @php
+                        $pageRange = 3; // Quantidade de páginas antes e depois da atual para exibir
+                        $currentPage = $users->currentPage();
+                        $lastPage = $users->lastPage();
+                        $startPage = max($currentPage - $pageRange, 1);
+                        $endPage = min($currentPage + $pageRange, $lastPage);
+                    @endphp
+    
+                    @for ($page = $startPage; $page <= $endPage; $page++)
+                        <li class="page-item {{ $page == $currentPage ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $users->url($page) }}">{{ $page }}</a>
+                        </li>
+                    @endfor
+    
+                    {{-- Próximo Page Link --}}
+                    <li class="page-item {{ !$users->hasMorePages() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $users->nextPageUrl() }}" rel="next" aria-label="Próxima">
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
+                    </li>
+    
+                    {{-- Última página --}}
+                    <li class="page-item {{ !$users->hasMorePages() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $users->url($lastPage) }}" aria-label="Última página">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+    
+                </ul>
+            </nav>
         </div>
     </div>
 @endsection

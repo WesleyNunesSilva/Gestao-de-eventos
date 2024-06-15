@@ -9,8 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
-    public function index() {    
-        $events = Event::with('organizer')->paginate(15);
+    public function index(Request $request) {   
+        $query = Event::with('organizer');
+    
+        if($request->has('title') && $request->input('title') != '') {
+            $query->where('title', 'LIKE', "%{$request->input('title')}%")
+                  ->orWhere('description', 'LIKE', "%{$request->input('title')}%")
+                  ->orWhere('location', 'LIKE', "%{$request->input('title')}%");
+        }
+    
+        $events = $query->paginate(15);
+    
         return view('event.index', compact('events'));      
     }
 

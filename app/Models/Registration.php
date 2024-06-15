@@ -52,10 +52,14 @@ class Registration extends Model
     }
 
     public function canCancel($user) {
-        return $user->type !== 'registered' || $user->id === $this->organizer_id;
+        return $this->status == 'pending' && $user->type !== 'organizer' || $user->id === $this->organizer_id;
     }
 
     public function canPay($user) {
         return $this->status == 'pending' && !$this->payment && $user->type == 'registered';
+    }
+
+    public function canDelete($user) {
+        return $user->type !== 'registered' || $user->id === $this->organizer_id;
     }
 }

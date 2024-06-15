@@ -71,24 +71,16 @@ class PaymentController extends Controller
     
             $registration->status = 'confirmed';
             $registration->save();
-
+    
             Mail::to($registration->user->email)->send(new RegistrationConfirmedMail($registration));
         }
         
         return redirect()->route('payments.index')->with('success', 'Pagamento realizado com sucesso!');
     }
 
-    public function updateStatus($id, Request $request) {
-        $payment = Payment::findOrFail($id);
-        $payment->status = $request->status;
-        $payment->save();
-
-        return redirect()->route('payments.index')->with('success', 'Status do pagamento atualizado com sucesso!');
-    }
-
     public function showEventPayments(Event $event) {
         $payments = Payment::where('event_id', $event->id)->get();
-
+    
         return view('events.payments', compact('event', 'payments'));
     }
 
@@ -100,14 +92,18 @@ class PaymentController extends Controller
                 $query->select('id')
                     ->from('registrations')
                     ->whereIn('event_id', $eventIds);
-            })->get();
-
-            $totalReceived = $payments->where('status', 'completed')->sum('value');
-            $totalPending = $payments->where('status', 'pending')->sum('value');
-
+            })->where('status', 'completed')->get();
+    
+            $totalReceived = $payments->sum('value');
+            $totalPending = Payment::whereIn('registration_id', function($query) use ($eventIds) {
+                $query->select('id')
+                    ->from('registrations')
+                    ->whereIn('event_id', $eventIds);
+            })->where('status', 'pending')->sum('value');
+    
             return view('payment.financial', compact('payments', 'totalReceived', 'totalPending'));
         }
-
+    
         return redirect()->back()->with('error', 'Você não tem permissão para acessar esta página.');
     }
 

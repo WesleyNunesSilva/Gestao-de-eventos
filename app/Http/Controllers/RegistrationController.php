@@ -56,14 +56,26 @@ class RegistrationController extends Controller
         $registration = Registration::findOrFail($id);
         $registration->status = $request->status;
         $registration->save();
-
-        if($registration->status == 'confirmed') {
+    
+        // Verifica se a inscrição foi confirmada
+        if ($registration->status == 'confirmed') {
+            // Se confirmada, tenta encontrar um pagamento associado
+            $payment = $registration->payment;
+    
+            if ($payment && $payment->status != 'completed') {
+                // Atualiza o status do pagamento para "completed"
+                $payment->status = 'completed';
+                $payment->save();
+            }
+    
+            // Envie o email de confirmação de inscrição
             Mail::to($registration->user->email)->send(new RegistrationConfirmedMail($registration));
         }
     
         $message = ($registration->status == 'canceled') ? 'Inscrição cancelada com sucesso!' : 'Inscrição atualizada com sucesso!';
         return redirect()->route('registrations.index')->with('success', $message);
     }
+    
 
     public function destroy(Registration $registration) {
         $registration->delete();

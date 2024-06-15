@@ -23,7 +23,20 @@
                         @foreach ($payments as $payment)
                         <tr>
                             <td>{{ $payment->formatted_value }}</td>
-                            <td>{{ $payment->payment_method }}</td>
+                            <td class="py-3 px-6"> 
+                                @switch($payment->payment_method)
+                                    @case('credit_card')
+                                            Cartão de Credito
+                                        @break
+                                    
+                                    @case('boleto')
+                                        Boleto
+                                    @break
+                                
+                                    @default
+                                        
+                                @endswitch
+                            </td>
                             <td>{{ $payment->status }}</td>
                             <td>{{ $payment->formatted_payment_date }}</td>
                         </tr>
@@ -31,6 +44,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div>   
     </div>
 @endsection

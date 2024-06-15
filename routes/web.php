@@ -26,14 +26,14 @@ Route::middleware(['auth', 'checkType:admin'])->group(function () {
 
 // Rotas para administradores e organizadores
 Route::middleware(['auth', 'checkType:admin,organizer'])->group(function () {
-    Route::resource('events', EventController::class)->except(['show']);
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::put('/registrations/{id}/update', [RegistrationController::class, 'update'])->name('registrations.update');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    
     Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy'])->name('registrations.destroy');
     
     Route::get('events/{eventId}/payments', [EventController::class, 'showEventPayments'])->name('events.payments');
+    Route::resource('events', EventController::class)->except(['show']);
 });
 
 Route::middleware(['auth', 'checkType:registered,admin,organizer'])->group(function () {
@@ -49,10 +49,6 @@ Route::middleware(['auth', 'checkType:registered,admin,organizer'])->group(funct
 
     Route::post('/events/{event}/registered', [EventController::class, 'registered'])->name('events.registered');
     Route::get('events/{id}', [EventController::class, 'show'])->name('events.show');
-});
+    Route::get('events', [EventController::class, 'index'])->name('events.index');
 
-// Rotas de pagamentos (aplicável a todos os usuários autenticados)
-Route::middleware(['auth'])->group(function () {
-    Route::post('/payments/process', [PaymentController::class, 'process'])->name('payments.process');
-    Route::get('/payments/history', [PaymentController::class, 'history'])->name('payments.history');
 });
