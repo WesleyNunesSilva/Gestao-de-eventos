@@ -32,37 +32,29 @@ git clone git@github.com:WesleyNunesSilva/Gestao-de-eventos.git
    ```bash
    cp .env.example .env
     ```
-3. Gere a chave do aplicativo Laravel:
+3. Faça a instalação do sail:
 
    ```bash
-   docker-compose run --rm app php artisan key:generate
+   composer require laravel/sail --dev
+    php artisan sail:install
     ```
 ## Executando o Projeto
 
 Para iniciar o projeto, siga os passos abaixo:
 
-1. Construa os contêineres Docker:
+1. Inicie os contêineres Docker:
 
    ```bash
-   docker-compose build
+   ./vendor/bin/sail up
     ```
-2. Inicie os contêineres Docker:
+
+2. Execute as migrações do banco de dados e os seeders, se aplicável:
 
    ```bash
-   docker-compose up -d
-    ```
-3. Acesse o container da aplicação para executar comandos Artisan, por exemplo:
-
-   ```bash
-   docker-compose exec app bash
-    ```
-4. Execute as migrações do banco de dados e os seeders, se aplicável:
-
-   ```bash
-   php artisan migrate
-   php artisan db:seed
+   ./vendor/bin/sail artisan migrate
+   ./vendor/bin/sail artisan db:seed
    ```
-5. O aplicativo estará disponivel em `http://localhost`.
+3. O aplicativo estará disponivel em `http://localhost`.
    
 
 
